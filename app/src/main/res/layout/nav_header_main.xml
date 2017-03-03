@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_header_height"
+    android:background="#432758"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_centerHorizontal="true"
+           android:paddingTop="@dimen/nav_header_vertical_spacing"
+           android:text="Music Mixer"
+           android:id="@+id/sideTiitle"
+           android:gravity="center_horizontal"
+           android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+       <ImageView
+           android:id="@+id/imageViewSide"
+           android:layout_width="wrap_content"
+           android:layout_centerHorizontal="true"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/sideTiitle"
+           android:paddingTop="@dimen/nav_header_vertical_spacing"
+           app:srcCompat="@android:drawable/sym_def_app_icon" />
+
+       <TextView
+           android:id="@+id/textView"
+           android:layout_width="wrap_content"
+           android:layout_centerHorizontal="true"
+           android:layout_below="@+id/imageViewSide"
+           android:layout_height="wrap_content"
+           android:text="Develop for Proof of Concept" />
+   </RelativeLayout>
+
+</LinearLayout>

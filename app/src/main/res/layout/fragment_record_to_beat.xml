@@ -1,0 +1,88 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.shixels.thankgodrichard.mixer.allViews.RecordToBeat">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/progress"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pleasewait"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/pleaseWait"/>
+
+            <com.pitt.library.fresh.FreshDownloadView
+                android:id="@+id/pitt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/statustext"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/pleaseWait"/>
+
+
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="100dp"
+            android:id="@+id/play"
+            android:layout_marginTop="60dp"
+            android:text="PLAY"
+            android:layout_below="@+id/progress"
+            android:layout_centerHorizontal="true"
+            android:layout_height="40dp" />
+
+        <Button
+            android:layout_width="100dp"
+            android:id="@+id/pause"
+            android:layout_below="@+id/play"
+            android:text="PAUSE"
+            android:layout_centerHorizontal="true"
+            android:layout_height="40dp" />
+        <Button
+            android:layout_width="100dp"
+            android:id="@+id/stop"
+            android:text="STOP"
+            android:layout_below="@+id/pause"
+            android:layout_centerHorizontal="true"
+            android:layout_height="40dp" />
+
+        <Button
+            android:layout_width="100dp"
+            android:id="@+id/playback"
+            android:text="PLay Back"
+            android:layout_below="@+id/stop"
+            android:layout_centerHorizontal="true"
+            android:layout_height="40dp" />
+
+        <Button
+            android:layout_width="100dp"
+            android:id="@+id/save"
+            android:text="SAVE"
+            android:layout_below="@+id/playback"
+            android:layout_centerHorizontal="true"
+            android:layout_height="40dp" />
+
+
+
+    </RelativeLayout>
+
+</FrameLayout>
