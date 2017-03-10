@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.shixels.thankgodrichard.mixer.MainActivity;
@@ -53,7 +54,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView title, play;
+        TextView title;
+        Button play;
         int position;
         listModel current;
         String id;
@@ -61,7 +63,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         public MyViewHolder(View itemView) {
             super(itemView);
            title = (TextView) itemView.findViewById(R.id.title);
-            play = (TextView) itemView.findViewById(R.id.paly);
+            play = (Button) itemView.findViewById(R.id.paly);
 
         }
 
@@ -97,8 +99,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
 
     }
-
-
 
 
 }

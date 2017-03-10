@@ -8,9 +8,9 @@ import java.util.ArrayList;
  * Created by thankgodrichard on 2/10/17.
  */
 
-public interface CallbackFuntion {
-    public void onSuccess();
+public  interface CallbackFuntion {
+    public   void onSuccess();
     public  void onError(String error);
-    public void gotdata(ArrayList<QBCustomObject> object);
+    public  void gotdata(ArrayList<QBCustomObject> object);
     public  void fileId();
 }

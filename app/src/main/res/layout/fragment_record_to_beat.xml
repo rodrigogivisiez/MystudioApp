@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.shixels.thankgodrichard.mixer.allViews.RecordToBeat">
 
     <!-- TODO: Update blank fragment layout -->
@@ -26,7 +27,9 @@
 
             <com.pitt.library.fresh.FreshDownloadView
                 android:id="@+id/pitt"
+                app:circular_progress_color="@color/colorPrimary"
                 android:layout_width="wrap_content"
+                android:backgroundTint="@android:color/transparent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary" />
 

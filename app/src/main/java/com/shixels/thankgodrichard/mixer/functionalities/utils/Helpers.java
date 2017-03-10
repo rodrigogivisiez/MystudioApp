@@ -34,6 +34,7 @@ public class Helpers {
 
     private Helpers() {
     }
+    public  static String Mx_Pref = "com.shixels.thankgodrichard.mixer";
 
     static final String APP_ID = "53557";
     static final String AUTH_KEY = "QAN7RGSX4tNzh-x";
@@ -41,7 +42,7 @@ public class Helpers {
     static final String ACCOUNT_KEY = "7fCKUFwp9GFsqcMKBrc8";
     public static final String Pref = "com.dickle.thankgodrichard.mixerApp";
 
-   public void dummy(final Context c, final String clasName, final CallbackFuntion callbackFuntion){
+   public void fetchData(final Context c, final int page, final String clasName, final CallbackFuntion callbackFuntion){
        String[] login = new String[2];
        login[0] = "test";
        login[1] = "testtest";
@@ -49,10 +50,11 @@ public class Helpers {
            @Override
            public void onSuccess() {
                final QBRequestGetBuilder requestBuilder = new QBRequestGetBuilder();
-               requestBuilder.setLimit(900);
+               requestBuilder.setSkip(page);
                QBCustomObjects.getObjects(clasName, requestBuilder, new QBEntityCallback<ArrayList<QBCustomObject>>() {
                    @Override
                    public void onSuccess(ArrayList<QBCustomObject> qbCustomObjects, Bundle bundle) {
+                       Log.i("burn",bundle2string(bundle));
                        callbackFuntion.gotdata(qbCustomObjects);
                    }
 
@@ -80,6 +82,36 @@ public class Helpers {
        });
 
    }
+    public void Register(String[] details, Context c, final CallbackFuntion callbackFuntion){
+        final  QBUser user = new QBUser();
+        user.setLogin(details[0]);
+        user.setPassword(details[1]);
+        user.setEmail(details[2]);
+        QBSettings.getInstance().init(c, APP_ID, AUTH_KEY, AUTH_SECRET);
+        QBSettings.getInstance().setAccountKey(ACCOUNT_KEY);
+        QBAuth.createSession(new QBEntityCallback<QBSession>() {
+            @Override
+            public void onSuccess(QBSession qbSession, Bundle bundle) {
+                QBUsers.signUp(user, new QBEntityCallback<QBUser>() {
+                    @Override
+                    public void onSuccess(QBUser qbUser, Bundle bundle) {
+                        callbackFuntion.onSuccess();
+                    }
+
+                    @Override
+                    public void onError(QBResponseException e) {
+                        callbackFuntion.onError(e.getMessage());
+                    }
+                });
+            }
+
+            @Override
+            public void onError(QBResponseException e) {
+
+            }
+        });
+
+    }
 
     //Signin users to quickblox
     public void SignIn(final String[] login, final Context c, final CallbackFuntion callBackFunc){
@@ -135,5 +167,43 @@ public class Helpers {
     }
 
 
+    //Todo Delete this function
+    public static String bundle2string(Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        }
+        String string = "Bundle{";
+        for (String key : bundle.keySet()) {
+            string += " " + key + " => " + bundle.get(key) + ";";
+        }
+        string += " }Bundle";
+        return string;
+    }
+
+    //fetchmore data
+
+    public void loadMore(Context c,String className, int skip, final qbcallback qbcallback){
+        fetchData(c,skip, className, new CallbackFuntion() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError(String error) {
+                qbcallback.onError(error);
+            }
+
+            @Override
+            public void gotdata(ArrayList<QBCustomObject> object) {
+                qbcallback.onSucess(object);
+            }
+
+            @Override
+            public void fileId() {
+
+            }
+        });
+    }
 
 }

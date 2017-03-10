@@ -133,6 +133,10 @@ public class RecordToBeat extends Fragment  implements View.OnClickListener{
         if(getArguments().getInt("class") == 0){
             save.setVisibility(View.GONE);
             playback.setVisibility(View.GONE);
+            play.setText("Play");
+        }
+        else {
+            play.setText("Record");
         }
 
 
@@ -171,6 +175,8 @@ public class RecordToBeat extends Fragment  implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.play:
+                play.setEnabled(false);
+                pause.setEnabled(true);
                 if(getArguments().getInt("class") == 0){
                     mediaPlayer.start();
                 }
@@ -182,6 +188,8 @@ public class RecordToBeat extends Fragment  implements View.OnClickListener{
                 break;
 
             case R.id.pause:
+                play.setEnabled(true);
+                pause.setEnabled(false);
                 if(getArguments().getInt("class") == 0){
                         mediaPlayer.pause();
                 }
@@ -195,12 +203,17 @@ public class RecordToBeat extends Fragment  implements View.OnClickListener{
                 }
                 break;
             case R.id.stop:
+                play.setEnabled(false);
+
                 if(getArguments().getInt("class") == 0){
                     mediaPlayer.stop();
+                    play.setEnabled(true);
+                    pause.setEnabled(false);
                 }
                 else{
                     stopRecording();
                     playMp3(music);
+                    play.setEnabled(true);
                 }
                 break;
             case R.id.playback:

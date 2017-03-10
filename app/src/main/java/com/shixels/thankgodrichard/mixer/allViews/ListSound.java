@@ -15,6 +15,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.github.pwittchen.infinitescroll.library.InfiniteScrollListener;
+import com.quickblox.core.request.QBRequestBuilder;
+import com.quickblox.core.request.QBRequestGetBuilder;
 import com.quickblox.customobjects.model.QBCustomObject;
 import com.quickblox.users.model.QBUser;
 import com.shixels.thankgodrichard.mixer.R;
@@ -22,8 +25,11 @@ import com.shixels.thankgodrichard.mixer.functionalities.adapters.NotificationAd
 import com.shixels.thankgodrichard.mixer.functionalities.model.listModel;
 import com.shixels.thankgodrichard.mixer.functionalities.utils.CallbackFuntion;
 import com.shixels.thankgodrichard.mixer.functionalities.utils.Helpers;
+import com.shixels.thankgodrichard.mixer.functionalities.utils.qbcallback;
 
 import java.util.ArrayList;
+
+import static com.github.pwittchen.infinitescroll.library.R.attr.layoutManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +37,7 @@ import java.util.ArrayList;
 public class ListSound extends Fragment {
 
     Helpers helpers = Helpers.getInstance();
+    int skip = 1;
 
     public ListSound() {
         // Required empty public constructor
@@ -42,7 +49,11 @@ public class ListSound extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_list_sound, container, false);
-        helpers.dummy(getContext(),"Sound", new CallbackFuntion() {
+        callData(view);
+        return  view;
+    }
+    private void callData(final View view){
+        helpers.fetchData(getContext(),0,"Sound",new CallbackFuntion() {
             @Override
             public void onSuccess() {
 
@@ -64,7 +75,7 @@ public class ListSound extends Fragment {
 
             }
         });
-        return  view;
+
     }
 
     private void setUpRecyclerView(View v, ArrayList<QBCustomObject> object) {
@@ -76,9 +87,27 @@ public class ListSound extends Fragment {
         LinearLayoutManager mLinearLayoutManagerVertical = new LinearLayoutManager(getContext()); // (Context context, int spanCount)
         mLinearLayoutManagerVertical.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(mLinearLayoutManagerVertical);
-
         recyclerView.setItemAnimator(new DefaultItemAnimator()); // Even if we dont use it then also our items shows default animation. #Check Docs
+       recyclerView.addOnScrollListener(createInfiniteScrollListener(mLinearLayoutManagerVertical,recyclerView));
         progressBar.setVisibility(View.GONE);
+    }
+    private InfiniteScrollListener createInfiniteScrollListener(LinearLayoutManager layoutManager,final RecyclerView recyclerView) {
+        return new InfiniteScrollListener(15,layoutManager) {
+            @Override public void onScrolledToEnd(final int firstVisibleItemPosition) {
+                helpers.loadMore(getContext(),"Sound", skip, new qbcallback() {
+                    @Override
+                    public void onSucess(ArrayList<QBCustomObject> objects) {
+                        skip++;
+                        refreshView(recyclerView, new NotificationAdapter(getContext(),listModel.getData(objects)),
+                                firstVisibleItemPosition);
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                    }
+                });
+            }
+        };
     }
 
     @Override
@@ -103,7 +132,6 @@ public class ListSound extends Fragment {
             }
         });
     }
-
 
 
 
