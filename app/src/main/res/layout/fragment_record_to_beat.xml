@@ -84,6 +84,29 @@
             android:layout_centerHorizontal="true"
             android:layout_height="40dp" />
 
+        <SeekBar
+            android:id="@+id/seekBar2"
+            android:rotation="270"
+            android:max="100"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/progress"
+            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp" />
+
+        <SeekBar
+            android:id="@+id/seekBar3"
+            android:rotation="270"
+            android:max="100"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/seekBar2"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp" />
 
 
     </RelativeLayout>

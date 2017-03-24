@@ -2,6 +2,7 @@ package com.shixels.thankgodrichard.mixer.allViews;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.media.AudioRecord;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Build;
@@ -27,10 +28,12 @@ import com.quickblox.customobjects.QBCustomObjects;
 import com.quickblox.customobjects.QBCustomObjectsFiles;
 import com.quickblox.customobjects.model.QBCustomObject;
 import com.quickblox.customobjects.model.QBCustomObjectFileField;
+import com.quickblox.users.model.QBUser;
 import com.shixels.thankgodrichard.mixer.MainActivity;
 import com.shixels.thankgodrichard.mixer.R;
 import com.shixels.thankgodrichard.mixer.functionalities.utils.CallbackFuntion;
 import com.shixels.thankgodrichard.mixer.functionalities.utils.Helpers;
+import com.shixels.thankgodrichard.mixer.functionalities.utils.userLogin;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -51,6 +54,10 @@ import java.util.Date;
 public class RecordToBeat extends Fragment  implements View.OnClickListener{
 
     byte[] music;
+
+    //Todo delete this or delete MediaRecorded
+
+
     MediaPlayer mediaPlayer = new MediaPlayer();
     MediaPlayer temp;
     Button play,pause,stop, save,playback;
@@ -64,13 +71,6 @@ public class RecordToBeat extends Fragment  implements View.OnClickListener{
     String[] login = new String[2];
     File file;
     int playbackStatus = 0;
-
-
-
-
-
-
-
 
     public RecordToBeat() {
         // Required empty public constructor
@@ -307,9 +307,9 @@ public class RecordToBeat extends Fragment  implements View.OnClickListener{
         if(status != 0){
             stopRecording();
         }
-        connectQb.SignIn(login, getContext(), new CallbackFuntion() {
+        connectQb.digitLogin(((MainActivity)getActivity()).digitsSession, getContext(), new userLogin() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(QBUser user) {
                 QBCustomObject qbCustomObject = new QBCustomObject("Recorded");
                 Date date = new Date();
                 qbCustomObject.putString("soundname",date.toGMTString());
@@ -348,23 +348,11 @@ public class RecordToBeat extends Fragment  implements View.OnClickListener{
 
                     }
                 });
-
-
             }
 
             @Override
-            public void onError(String error) {
+            public void onError(String Error, int ErrorCode) {
 
-            }
-
-            @Override
-            public void gotdata(ArrayList<QBCustomObject> object) {
-                //passs
-            }
-
-            @Override
-            public void fileId() {
-                //pass
             }
         });
     }
@@ -399,9 +387,9 @@ public class RecordToBeat extends Fragment  implements View.OnClickListener{
     public void downloadile(final String id){
         statusText.setText("Downloading...");
         downloadView.reset();
-        connectQb.SignIn(login, getContext(), new CallbackFuntion() {
+        connectQb.digitLogin(((MainActivity) getActivity()).digitsSession, getContext(), new userLogin() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(QBUser user) {
                 QBCustomObject qbCustomObject = new QBCustomObject("Sound", id);
                 QBCustomObjectsFiles.downloadFile(qbCustomObject, "sound", new QBEntityCallback<InputStream>() {
                     @Override
@@ -443,17 +431,7 @@ public class RecordToBeat extends Fragment  implements View.OnClickListener{
             }
 
             @Override
-            public void onError(String error) {
-
-            }
-
-            @Override
-            public void gotdata(ArrayList<QBCustomObject> object) {
-
-            }
-
-            @Override
-            public void fileId() {
+            public void onError(String Error, int ErrorCode) {
 
             }
         });

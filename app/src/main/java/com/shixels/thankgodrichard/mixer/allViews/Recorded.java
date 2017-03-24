@@ -15,8 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.digits.sdk.android.DigitsSession;
 import com.github.pwittchen.infinitescroll.library.InfiniteScrollListener;
 import com.quickblox.customobjects.model.QBCustomObject;
+import com.shixels.thankgodrichard.mixer.MainActivity;
 import com.shixels.thankgodrichard.mixer.R;
 import com.shixels.thankgodrichard.mixer.functionalities.adapters.NotificationAdapter;
 import com.shixels.thankgodrichard.mixer.functionalities.model.listModel;
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 public class Recorded extends Fragment {
     Helpers helpers = Helpers.getInstance();
     int skip = 1;
+    DigitsSession digitsSession;
     ProgressBar loadMoreSpinner;
 
     public Recorded() {
@@ -44,12 +47,13 @@ public class Recorded extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_recorded, container, false);
+        digitsSession = ((MainActivity)getActivity()).digitsSession;
         calldata(view);
         loadMoreSpinner = (ProgressBar) view.findViewById(R.id.loadmoreSpiner);
         return  view;
     }
     private void calldata(final View view){
-        helpers.fetchData(getContext(),0,"Recorded", new CallbackFuntion() {
+        helpers.fetchData(digitsSession,getContext(),0,"Recorded", new CallbackFuntion() {
             @Override
             public void onSuccess() {
 
@@ -115,7 +119,7 @@ public class Recorded extends Fragment {
         loadMoreSpinner.setVisibility(View.VISIBLE);
         return new InfiniteScrollListener(15,layoutManager) {
             @Override public void onScrolledToEnd(final int firstVisibleItemPosition) {
-                helpers.loadMore(getContext(),"Recorded", skip, new qbcallback() {
+                helpers.loadMore(digitsSession,getContext(),"Recorded", skip, new qbcallback() {
                     @Override
                     public void onSucess(ArrayList<QBCustomObject> objects) {
                         skip++;

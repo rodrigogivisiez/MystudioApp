@@ -15,11 +15,13 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.digits.sdk.android.DigitsSession;
 import com.github.pwittchen.infinitescroll.library.InfiniteScrollListener;
 import com.quickblox.core.request.QBRequestBuilder;
 import com.quickblox.core.request.QBRequestGetBuilder;
 import com.quickblox.customobjects.model.QBCustomObject;
 import com.quickblox.users.model.QBUser;
+import com.shixels.thankgodrichard.mixer.MainActivity;
 import com.shixels.thankgodrichard.mixer.R;
 import com.shixels.thankgodrichard.mixer.functionalities.adapters.NotificationAdapter;
 import com.shixels.thankgodrichard.mixer.functionalities.model.listModel;
@@ -53,7 +55,7 @@ public class ListSound extends Fragment {
         return  view;
     }
     private void callData(final View view){
-        helpers.fetchData(getContext(),0,"Sound",new CallbackFuntion() {
+        helpers.fetchData(((MainActivity)getActivity()).digitsSession,getContext(),0,"Sound",new CallbackFuntion() {
             @Override
             public void onSuccess() {
 
@@ -94,7 +96,7 @@ public class ListSound extends Fragment {
     private InfiniteScrollListener createInfiniteScrollListener(LinearLayoutManager layoutManager,final RecyclerView recyclerView) {
         return new InfiniteScrollListener(15,layoutManager) {
             @Override public void onScrolledToEnd(final int firstVisibleItemPosition) {
-                helpers.loadMore(getContext(),"Sound", skip, new qbcallback() {
+                helpers.loadMore(((MainActivity)getActivity()).digitsSession,getContext(),"Sound", skip, new qbcallback() {
                     @Override
                     public void onSucess(ArrayList<QBCustomObject> objects) {
                         skip++;
