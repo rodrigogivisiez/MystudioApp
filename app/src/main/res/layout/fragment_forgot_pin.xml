@@ -1,0 +1,109 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2b313e"
+    tools:context="com.shixels.thankgodrichard.mixer.allViews.ForgotPin">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_width="100dp"
+            android:id="@+id/logo"
+            android:layout_height="100dp"
+            android:src="@drawable/logo"/>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_below="@+id/logo"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:background="#363d4d"
+            android:layout_marginTop="20dp"
+            android:id="@+id/auth_button"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset Your Pin"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:id="@+id/title"
+                android:textColor="@color/white"
+                android:layout_marginTop="5dp"
+                android:layout_centerHorizontal="true"/>
+
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:id="@+id/phoneNumber"
+                android:layout_below="@+id/title"
+                android:inputType="phone"
+                android:layout_marginTop="14dp"
+                android:layout_marginRight="14dp"
+                android:maxLength="15"
+                android:layout_marginLeft="14dp"
+                android:backgroundTint="#464f64"
+                android:textColor="@color/white"
+                android:textColorHint="#aaaaaa"
+                android:background="@drawable/square_border"
+                android:layout_height="wrap_content"
+                android:hint="@string/enterPhone"/>
+
+
+
+
+            <Button
+                android:layout_width="117dp"
+                android:id="@+id/submit"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/white"
+                android:background="#1e2736"
+                android:layout_marginBottom="15dp"
+                android:layout_below="@+id/phoneNumber"
+                android:layout_centerHorizontal="true"
+                android:layout_height="45dp"
+                android:text="@string/resetPin"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_below="@+id/auth_button"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:id="@+id/progress"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pleaseWait"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</FrameLayout>

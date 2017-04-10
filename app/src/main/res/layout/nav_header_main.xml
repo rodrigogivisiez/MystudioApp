@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="#432758"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -21,7 +20,7 @@
            android:layout_height="wrap_content"
            android:layout_centerHorizontal="true"
            android:paddingTop="@dimen/nav_header_vertical_spacing"
-           android:text="Music Mixer"
+           android:text="My Studio"
            android:id="@+id/sideTiitle"
            android:gravity="center_horizontal"
            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
@@ -35,13 +34,6 @@
            android:paddingTop="@dimen/nav_header_vertical_spacing"
            app:srcCompat="@android:drawable/sym_def_app_icon" />
 
-       <TextView
-           android:id="@+id/textView"
-           android:layout_width="wrap_content"
-           android:layout_centerHorizontal="true"
-           android:layout_below="@+id/imageViewSide"
-           android:layout_height="wrap_content"
-           android:text="Develop for Proof of Concept" />
    </RelativeLayout>
 
 </LinearLayout>

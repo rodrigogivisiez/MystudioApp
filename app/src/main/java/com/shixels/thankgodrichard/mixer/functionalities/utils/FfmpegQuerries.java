@@ -14,19 +14,18 @@ import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedExceptio
 
 public class FfmpegQuerries {
     private static final FfmpegQuerries ourInstance = new FfmpegQuerries();
-    static Context c;
 
-    public static FfmpegQuerries getInstance(Context context) {
-        c = context;
+    public static FfmpegQuerries getInstance() {
         return ourInstance;
     }
 
     private FfmpegQuerries() {
     }
 
-    FFmpeg fFmpeg = FFmpeg.getInstance(c);
+    FFmpeg fFmpeg;
 
-    public void loadFfmeg(final ffmpegCallback callback) throws FFmpegNotSupportedException {
+    public void loadFfmeg(Context c,final ffmpegCallback callback) throws FFmpegNotSupportedException {
+        fFmpeg = FFmpeg.getInstance(c);
         fFmpeg.loadBinary(new FFmpegLoadBinaryResponseHandler() {
             @Override
             public void onFailure() {

@@ -15,6 +15,7 @@ import com.digits.sdk.android.DigitsOAuthSigning;
 import com.digits.sdk.android.DigitsSession;
 import com.digits.sdk.android.events.DigitsEventDetails;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.quickblox.auth.QBAuth;
 import com.quickblox.auth.model.QBSession;
 import com.quickblox.core.QBEntityCallback;
@@ -30,7 +31,15 @@ import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterAuthToken;
 import com.twitter.sdk.android.core.TwitterCore;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -45,7 +54,6 @@ public class Helpers {
     public static Helpers getInstance() {
         return ourInstance;
     }
-
     private Helpers() {
     }
     public  static String Mx_Pref = "com.shixels.thankgodrichard.mixer";
@@ -56,12 +64,11 @@ public class Helpers {
     static final String ACCOUNT_KEY = "7fCKUFwp9GFsqcMKBrc8";
     public static final String Pref = "com.dickle.thankgodrichard.mixerApp";
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
-   public void fetchData(DigitsSession session,final Context c, final int page, final String clasName, final CallbackFuntion callbackFuntion){
+   public void fetchData(final int log, DigitsSession session, final Context c, final int page, final String clasName, final CallbackFuntion callbackFuntion){
       digitLogin(session, c, new userLogin() {
           @Override
           public void onSuccess(QBUser user) {
               final QBRequestGetBuilder requestBuilder = new QBRequestGetBuilder();
-              requestBuilder.setSkip(page);
               QBCustomObjects.getObjects(clasName, requestBuilder, new QBEntityCallback<ArrayList<QBCustomObject>>() {
                   @Override
                   public void onSuccess(ArrayList<QBCustomObject> qbCustomObjects, Bundle bundle) {
@@ -184,7 +191,7 @@ public class Helpers {
     //fetchmore data
 
     public void loadMore(DigitsSession session,Context c,String className, int skip, final qbcallback qbcallback){
-        fetchData(session,c,skip, className, new CallbackFuntion() {
+        fetchData(0,session,c,skip, className, new CallbackFuntion() {
             @Override
             public void onSuccess() {
 
@@ -261,5 +268,127 @@ public class Helpers {
 
         return oauthSigning.getOAuthEchoHeadersForVerifyCredentials();
     }
+
+    public File rawToWave(final File rawFile, final String filePath) throws IOException {
+
+        File waveFile = new File(filePath);
+
+        byte[] rawData = new byte[(int) rawFile.length()];
+        DataInputStream input = null;
+        try {
+            input = new DataInputStream(new FileInputStream(rawFile));
+            input.read(rawData);
+        } finally {
+            if (input != null) {
+                input.close();
+            }
+        }
+
+        DataOutputStream output = null;
+        try {
+            output = new DataOutputStream(new FileOutputStream(waveFile));
+            // WAVE header
+            // see http://ccrma.stanford.edu/courses/422/projects/WaveFormat/
+            writeString(output, "RIFF"); // chunk id
+            writeInt(output, 36 + rawData.length); // chunk size
+            writeString(output, "WAVE"); // format
+            writeString(output, "fmt "); // subchunk 1 id
+            writeInt(output, 16); // subchunk 1 size
+            writeShort(output, (short) 1); // audio format (1 = PCM)
+            writeShort(output, (short) 1); // number of channels
+            writeInt(output, Constants.RECORDER_SAMPLERATE); // sample rate
+            writeInt(output, Constants.RECORDER_SAMPLERATE * 2); // byte rate
+            writeShort(output, (short) 2); // block align
+            writeShort(output, (short) 16); // bits per sample
+            writeString(output, "data"); // subchunk 2 id
+            writeInt(output, rawData.length); // subchunk 2 size
+            // Audio data (conversion big endian -> little endian)
+            short[] shorts = new short[rawData.length / 2];
+            ByteBuffer.wrap(rawData).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(shorts);
+            ByteBuffer bytes = ByteBuffer.allocate(shorts.length * 2);
+            for (short s : shorts) {
+                bytes.putShort(s);
+            }
+            output.write(bytes.array());
+        } finally {
+            if (output != null) {
+                output.close();
+            }
+        }
+
+        return waveFile;
+
+    }
+
+    private void writeInt(final DataOutputStream output, final int value) throws IOException {
+        output.write(value >> 0);
+        output.write(value >> 8);
+        output.write(value >> 16);
+        output.write(value >> 24);
+    }
+
+    private void writeShort(final DataOutputStream output, final short value) throws IOException {
+        output.write(value >> 0);
+        output.write(value >> 8);
+    }
+
+    private void writeString(final DataOutputStream output, final String value) throws IOException {
+        for (int i = 0; i < value.length(); i++) {
+            output.write(value.charAt(i));
+        }
+    }
+
+    public void saveCustomObject(ArrayList<QBCustomObject> objects, Context c, String type){
+        SharedPreferences preferences = c.getSharedPreferences(Pref, c.MODE_PRIVATE);;
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson gson = new Gson();
+        String tempData = gson.toJson(objects,new TypeToken<ArrayList<QBCustomObject>>(){}.getType());
+        editor.putString(type,tempData);
+        editor.commit();
+    }
+
+    public ArrayList<QBCustomObject> fetchSavedCategories(Context c, String type){
+        SharedPreferences preferences = c.getSharedPreferences(Pref, c.MODE_PRIVATE);;
+        Gson gson = new Gson();
+        String tempData = preferences.getString(type,null);
+        if(tempData != null ){
+            if(tempData.length() > 2) {
+                ArrayList<QBCustomObject> objects = gson.fromJson(tempData, new TypeToken<ArrayList<QBCustomObject>>() {
+                }.getType());
+                return objects;
+            }
+        }
+        return null;
+
+    }
+
+    public void fetchRecorded(final int log, DigitsSession session, final Context c, final int page, final String clasName, final CallbackFuntion callbackFuntion){
+        digitLogin(session, c, new userLogin() {
+            @Override
+            public void onSuccess(QBUser user) {
+                final QBRequestGetBuilder requestBuilder = new QBRequestGetBuilder();
+                requestBuilder.eq("user_id", user.getId());
+                QBCustomObjects.getObjects(clasName, requestBuilder, new QBEntityCallback<ArrayList<QBCustomObject>>() {
+                    @Override
+                    public void onSuccess(ArrayList<QBCustomObject> qbCustomObjects, Bundle bundle) {
+                        Log.i("burn",bundle2string(bundle));
+                        callbackFuntion.gotdata(qbCustomObjects);
+                    }
+
+                    @Override
+                    public void onError(QBResponseException e) {
+                        callbackFuntion.onError(e.getMessage());
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String Error, int ErrorCode) {
+
+            }
+        });
+
+    }
+
 
 }

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:gravity="center_horizontal"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.natasa.progresspercent.CircularProgress
+            android:id="@+id/downloadProgress"
+            android:layout_width="160dp"
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"
+            app:background_stroke_width="5dp"
+            app:progress="0"
+            app:background_color="#e0e0e0"
+            app:progress_color="#ffffff"
+            app:stroke_width="5dp"
+           />
+
+        <com.shixels.thankgodrichard.mixer.functionalities.widget.ShadowImageView
+            android:id="@+id/image_view_album"
+            android:layout_width="@dimen/mp.music.album.size"
+            android:layout_height="@dimen/mp.music.album.size"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            app:srcCompat="@drawable/disc" />
+
+        <!-- This library requires pair of the VerticalSeekBar and VerticalSeekBarWrapper classes -->
+        <View
+            android:layout_width="80dp"
+            android:id="@+id/soundVol"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_height="300dp">
+        </View>
+
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/text_view_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/mp.margin.xlarge"
+        android:layout_marginRight="@dimen/mp.margin.xlarge"
+        android:layout_marginBottom="@dimen/mp.margin.normal"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textColor="?attr/colorAccent"
+        tools:text="Drag me down"
+        />
+
+    <TextView
+        android:id="@+id/text_view_artist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/mp.margin.xlarge"
+        android:layout_marginRight="@dimen/mp.margin.xlarge"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:textColor="?attr/colorAccent"
+        tools:text="One Direction"
+        />
+
+    <LinearLayout
+        android:id="@+id/layout_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="44dp"
+        android:layout_marginTop="@dimen/mp.music.seekBar.marginTop"
+        android:gravity="center_vertical"
+        >
+
+        <TextView
+            android:id="@+id/music_duration_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorAccent"
+            android:textSize="12sp"
+            android:singleLine="true"
+            android:text="@string/mp.music.default_duration"
+            />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/musicSeekBar"
+            style="@style/Widget.AppCompat.SeekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="10000"
+            tools:progress="5000" />
+
+        <TextView
+            android:id="@+id/total_music_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorAccent"
+            android:textSize="12sp"
+            android:singleLine="true"
+            android:text="@string/mp.music.default_duration"
+            tools:text="03:22"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_play_controls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mp.music.playControls.marginTop"
+        android:layout_marginBottom="@dimen/mp.music.playControls.marginBottom"
+        android:showDividers="middle"
+        android:divider="@drawable/common_divider_xlarge_horizontal"
+        android:gravity="center_vertical"
+        >
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/save"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:tint="@color/white"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/stop"
+            android:tint="@color/white"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="@color/white"
+            app:srcCompat="@drawable/microphone"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+
+  v      <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/extra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            app:srcCompat="@drawable/ic_menu_share"
+            android:tint="@color/white"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+    </LinearLayout>
+</LinearLayout>

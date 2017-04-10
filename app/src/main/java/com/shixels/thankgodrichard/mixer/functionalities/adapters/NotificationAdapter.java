@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,7 +56,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView title;
-        Button play;
+        AppCompatImageView play;
         int position;
         listModel current;
         String id;
@@ -63,12 +64,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         public MyViewHolder(View itemView) {
             super(itemView);
            title = (TextView) itemView.findViewById(R.id.title);
-            play = (Button) itemView.findViewById(R.id.paly);
+            play = (AppCompatImageView) itemView.findViewById(R.id.paly);
 
         }
 
         public void setData(final listModel current, int position) {
-            final TextView play2 = this.play;
             this.position = position;
             this.current = current;
             this.title.setText(current.getTitle());
@@ -78,12 +78,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     Bundle arg = new Bundle();
                     Fragment fragment = new RecordToBeat();
                     Log.i("burn","I am here now");
-                    if(current.getDescription() == "Recorded"){
-                        arg.putInt("class",0);
-                    }
-                    else {
-                        arg.putInt("class",1);
-                    }
+                    arg.putInt("class",current.getType());
                     arg.putString("mp",current.getId());
                     fragment.setArguments(arg);
                     MainActivity mainActivity = (MainActivity)cont;

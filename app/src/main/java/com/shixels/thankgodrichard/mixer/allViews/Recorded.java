@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.digits.sdk.android.DigitsSession;
@@ -27,6 +28,8 @@ import com.shixels.thankgodrichard.mixer.functionalities.utils.Helpers;
 import com.shixels.thankgodrichard.mixer.functionalities.utils.qbcallback;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +39,10 @@ public class Recorded extends Fragment {
     int skip = 1;
     DigitsSession digitsSession;
     ProgressBar loadMoreSpinner;
+    RelativeLayout errorContainer;
+    ProgressBar progressBar ;
+    TextView errorText;
+    private TimerTask timerTask;
 
     public Recorded() {
         // Required empty public constructor
@@ -48,26 +55,58 @@ public class Recorded extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_recorded, container, false);
         digitsSession = ((MainActivity)getActivity()).digitsSession;
-        calldata(view);
+        errorContainer = (RelativeLayout) view.findViewById(R.id.error);
+        errorText = (TextView) view.findViewById(R.id.errorText);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressspiner);
+        ArrayList<QBCustomObject> tempObjects =  helpers.fetchSavedCategories(getContext(),"recordrd");
+        if( tempObjects == null){
+            calldata(view);
+        }
+        else {
+            setUpRecyclerView(view,tempObjects);
+        }
         loadMoreSpinner = (ProgressBar) view.findViewById(R.id.loadmoreSpiner);
+        refresh(view);
         return  view;
     }
     private void calldata(final View view){
-        helpers.fetchData(digitsSession,getContext(),0,"Recorded", new CallbackFuntion() {
+        helpers.fetchRecorded(1,digitsSession,getContext(),0,"Recorded", new CallbackFuntion() {
             @Override
             public void onSuccess() {
 
             }
 
             @Override
-            public void onError(String error) {
+            public void onError(final String error) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setVisibility(View.GONE);
+                        errorContainer.setVisibility(View.VISIBLE);
+                        errorText.setText(error);
+                    }
+                });
                 Toast.makeText(getContext(),error,Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void gotdata(ArrayList<QBCustomObject> object) {
-                Log.i("burn","yes");
-                setUpRecyclerView(view,object);
+                Log.i("size",object.size() + "");
+                if(object.size() == 0){
+                    setUpRecyclerView(view,object);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressBar.setVisibility(View.GONE);
+                            errorContainer.setVisibility(View.VISIBLE);
+                            errorText.setText("No Sound Avialable");
+                        }
+                    });
+                }
+                else {
+                    helpers.saveCustomObject(object,getContext(),"recordrd");
+                    setUpRecyclerView(view,object);
+                }
             }
 
             @Override
@@ -78,9 +117,9 @@ public class Recorded extends Fragment {
     }
 
     private void setUpRecyclerView(View v, ArrayList<QBCustomObject> object) {
-        ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.progressspiner);
+
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-        NotificationAdapter adapter = new NotificationAdapter(getContext(), listModel.getData(object));
+        NotificationAdapter adapter = new NotificationAdapter(getContext(), listModel.getData(object,0));
         recyclerView.setAdapter(adapter);
         LinearLayoutManager mLinearLayoutManagerVertical = new LinearLayoutManager(getContext()); // (Context context, int spanCount)
         mLinearLayoutManagerVertical.setOrientation(LinearLayoutManager.VERTICAL);
@@ -88,8 +127,15 @@ public class Recorded extends Fragment {
         recyclerView.hasFixedSize();
         recyclerView.smoothScrollToPosition(View.SCROLLBAR_POSITION_LEFT);
         recyclerView.setItemAnimator(new DefaultItemAnimator()); // Even if we dont use it then also our items shows default animation. #Check Docs
-        recyclerView.addOnScrollListener(createInfiniteScrollListener(mLinearLayoutManagerVertical,recyclerView));
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(timerTask != null){
+            timerTask.cancel();
+        }
     }
 
     @Override
@@ -115,26 +161,23 @@ public class Recorded extends Fragment {
         });
     }
 
-    private InfiniteScrollListener createInfiniteScrollListener(LinearLayoutManager layoutManager, final RecyclerView recyclerView) {
-        loadMoreSpinner.setVisibility(View.VISIBLE);
-        return new InfiniteScrollListener(15,layoutManager) {
-            @Override public void onScrolledToEnd(final int firstVisibleItemPosition) {
-                helpers.loadMore(digitsSession,getContext(),"Recorded", skip, new qbcallback() {
+    private void refresh(final View v){
+        Timer timer = new Timer();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
-                    public void onSucess(ArrayList<QBCustomObject> objects) {
-                        skip++;
-                        refreshView(recyclerView, new NotificationAdapter(getContext(),listModel.getData(objects)),
-                                firstVisibleItemPosition);
-                        loadMoreSpinner.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onError(String errorMessage) {
+                    public void run() {
+                        calldata(v);
                     }
                 });
+
             }
         };
+        timer.scheduleAtFixedRate(timerTask,0,180000);
     }
+
 
 
 

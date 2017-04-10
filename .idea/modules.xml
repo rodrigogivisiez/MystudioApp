@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Mixer.iml" filepath="$PROJECT_DIR$/Mixer.iml" />
       <module fileurl="file://$PROJECT_DIR$/MystudioApp.iml" filepath="$PROJECT_DIR$/MystudioApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/percentprogresslib/percentprogresslib.iml" filepath="$PROJECT_DIR$/percentprogresslib/percentprogresslib.iml" />
     </modules>
   </component>
 </project>

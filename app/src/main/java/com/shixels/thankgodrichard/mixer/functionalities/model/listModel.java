@@ -16,6 +16,7 @@ public class listModel {
     private String title;
     private String className;
     private String id;
+    private int type;
 
 
 
@@ -35,7 +36,7 @@ public class listModel {
         this.className = description;
     }
 
-    public static ArrayList<listModel> getData(ArrayList<QBCustomObject> objects) {
+    public static ArrayList<listModel> getData(ArrayList<QBCustomObject> objects, int typein) {
 
         ArrayList<listModel> dataList = new ArrayList<>();
 
@@ -43,13 +44,12 @@ public class listModel {
             if(objects.size() >= 1){
 
                 for (int i = 0; i < objects.size(); i++) {
-
                     listModel landscape = new listModel();
                     landscape.setTitle(objects.get(i).getString("soundname"));
                     landscape.setId(objects.get(i).getCustomObjectId());
                     landscape.setDescription(objects.get(i).getClassName());
+                    landscape.setType(typein);
                     dataList.add(landscape);
-
                 }
 
             }
@@ -64,5 +64,13 @@ public class listModel {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

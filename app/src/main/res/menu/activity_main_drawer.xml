@@ -4,10 +4,13 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/music"
-            android:title="Sounds" />
+            android:title="Beat Studio" />
         <item
             android:id="@+id/mysounds"
-            android:title="Mixed" />
+            android:title="My Mixes" />
+        <item
+            android:id="@+id/allmixed"
+            android:title="Mixed Studio" />
         <item
             android:id="@+id/myacccount"
             android:title="My Account" />

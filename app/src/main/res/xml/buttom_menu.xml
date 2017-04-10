@@ -1,0 +1,14 @@
+<tabs>
+    <tab
+        id="@+id/artist"
+        icon="@drawable/headphone"
+        title="Artistes" />
+    <tab
+        id="@+id/categories"
+        icon="@drawable/albums"
+        title="Genre" />
+    <tab
+        id="@+id/beats"
+        icon="@drawable/songs"
+        title="Beats" />
+</tabs>
